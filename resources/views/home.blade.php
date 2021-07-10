@@ -16,6 +16,9 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+                @if (Auth()->user()->isAdmin())
+                {{ __('You are an admin!') }}
+                @endif
             </div>
         </div>
     </div>
