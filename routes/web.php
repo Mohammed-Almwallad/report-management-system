@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{id}',[UserController::class, 'update'])->name('users.update');
 
     // groups routes
-    
+    Route::get('/groups/create',[GroupController::class, 'create'])->name('groups.create');
+    Route::post('/groups',[GroupController::class, 'store'])->name('groups.store');
+
+
 });
 
 
