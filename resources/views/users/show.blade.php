@@ -23,7 +23,7 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <hr>
                             <div class="form-group row">
                                 <label for="email"
                                     class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
@@ -39,14 +39,25 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <hr>
                             <div class="form-group row">
                                 <label for="roles"
                                     class="col-md-4 col-form-label text-md-right">{{ __('User roles') }}</label>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 mt-2">
                                         @foreach ($user->roles as $id => $role)
-                                            <p>{{$role}}</p>
+                                            <p>{{ $role }}</p>
+                                        @endforeach
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label for="groups"
+                                    class="col-md-4 col-form-label text-md-right">{{ __('User groups') }}</label>
+
+                                <div class="col-md-6 mt-2">
+                                        @foreach ($user->groups as $id => $group)
+                                            <p>{{ $group }}</p>
                                         @endforeach
                                 </div>
                             </div>

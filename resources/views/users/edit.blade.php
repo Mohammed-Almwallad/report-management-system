@@ -59,6 +59,24 @@
                                     </select>
                                 </div>
                             </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label for="groups"
+                                    class="col-md-4 col-form-label text-md-right">{{ __('User groups') }}</label>
+
+                                <div class="col-md-6">
+                                    <select multiple class="form-control" id="groups" name="groups[]" required
+                                        autocomplete="groups">
+                                        @foreach ($groups as $id => $group)
+                                            @if (in_array($group, $user->groups))
+                                            <option value="{{ $id }}" selected>{{ $group }}</option>
+                                            @else
+                                            <option value="{{ $id }}">{{ $group }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
