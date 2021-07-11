@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Group;
 
 class UserController extends Controller
 {
@@ -18,9 +19,13 @@ class UserController extends Controller
     public function index()
     {
         $admin = auth()->user();
-        $users = User::whereNotIn('name',[$admin->name])->get();
+        if ($admin->isAdmin()) {
+            $users = User::whereNotIn('name',[$admin->name])->get();
+        } else {
+            return back()->with('error','You do not have access to this page.');
+        }
 
-        return view('users.index',compact('users'));
+        return view('users.index')->with(['users'=>$users]);
     }
 
     /**
@@ -30,9 +35,16 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
+        $admin = auth()->user();
+        if ($admin->isAdmin()) {
+            $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
+            $groups = Group::latest()->pluck('name','id')->toArray();
+        } else {
+            return back()->with('error','You do not have access to this page.');
+        }
+        
 
-        return view('users.create')->with(['roles' => $roles]);
+        return view('users.create')->with(['roles' => $roles])->with(['groups'=>$groups]);
     }
 
     /**
@@ -43,12 +55,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $admin = auth()->user();
+        if(!$user->isAdmin()){
+            return back()->with('error','You do not have access to do this action.'); 
+        }
+
         $validator = Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:6',
             'roles'=>'array|required',
             'roles.*'=>'required',
+            'groups'=>'array|required',
+            'groups.*'=>'required',
         ]);
 
         if($validator->fails()){
@@ -62,6 +81,7 @@ class UserController extends Controller
         ]);
 
         $user->roles()->attach($request->roles);
+        $user->groups()->attach($request->groups);
 
         return redirect()->route('users.index')
             ->with('success','User added successfully.');
@@ -76,8 +96,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::where('id',$id)->first();
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            $user = User::where('id',$id)->first();
+        }
         $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
+        $user['groups'] = $user->groups->pluck('name','id')->toArray(); 
+        
         
         return view('users.show')->with(['user'=>$user]);
     }
@@ -90,11 +116,17 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::where('id', $id)->first();
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            $user = User::where('id', $id)->first();
+        } 
         $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
+        $user['groups'] = $user->groups->pluck('name','id')->toArray(); 
+        $groups = Group::latest()->pluck('name','id')->toArray();
 
-        return view('users.edit')->with(['user' => $user])->with(['roles' => $roles]);
+        return view('users.edit')->with(['user' => $user])->with(['roles' => $roles])->with(['groups' => $groups]);
     }
 
     /**
@@ -106,11 +138,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $admin = auth()->user();
+        if(!$user->isAdmin()){
+            return back()->with('error','You do not have access to do this action.'); 
+        }
+        
         $validator = Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required',
             'roles'=>'array|required',
             'roles.*'=>'required',
+            'groups'=>'array|required',
+            'groups.*'=>'required',
         ]);
 
         if($validator->fails()){
@@ -122,6 +161,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
         $user->roles()->sync($request->roles);
+        $user->groups()->sync($request->groups);
         
         return redirect()->route('users.index')
         ->with('success','User edited successfully.');
@@ -135,8 +175,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-      User::find($id)->delete();
-      return redirect()->route('users.index')
-        ->with('success','User deleted successfully.');
+        $admin = auth()->user();
+
+        if ($admin->isAdmin()) {
+            User::find($id)->delete();
+        } else {
+            return back()->with('error','You do not have access to do this action.');
+        }
+        
+        return redirect()->route('users.index')
+            ->with('success','User deleted successfully.');
     }
 }

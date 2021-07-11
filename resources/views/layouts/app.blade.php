@@ -49,7 +49,7 @@
                                     <a class="nav-link text-white" href="#">reports</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" href="#">groups</a>
+                                    <a class="nav-link text-white" href="{{ route('groups.index')}}">groups</a>
                                 </li>
 
                             @else
