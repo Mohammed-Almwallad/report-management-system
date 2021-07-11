@@ -99,7 +99,7 @@
         </nav>
 
         <main class="py-4">
-            @include('flash-message')
+            @include('flash_message')
             @yield('content')
         </main>
     </div>

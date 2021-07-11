@@ -6,17 +6,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header text-center">{{ __('user data') }}</div>
-
                     <div class="card-body">
                         <form>
                             @csrf
-
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="name" type="text" readonly class="form-control-plaintext" @error('name') is-invalid @enderror"
-                                        name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
+                                        name="name" value="{{ $user->name }}" required autocomplete="name">
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -41,29 +39,15 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label for="roles"
                                     class="col-md-4 col-form-label text-md-right">{{ __('User roles') }}</label>
 
                                 <div class="col-md-6">
-                                    <select multiple readonly class="form-control-plaintext" id="roles" name="roles[]" required
-                                        autocomplete="roles">
                                         @foreach ($user->roles as $id => $role)
-                                            {{-- @if (in_array($role, $user->roles)) --}}
-                                            {{-- <option value="{{ $id }}" selected>{{ $role }}</option> --}}
-                                            {{-- @else --}}
-                                            <option value="{{ $id }}">{{ $role }}</option>
-                                            {{-- @endif --}}
+                                            <p>{{$role}}</p>
                                         @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Edit') }}
-                                    </button>
                                 </div>
                             </div>
                         </form>

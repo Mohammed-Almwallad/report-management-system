@@ -19,6 +19,7 @@ class UserController extends Controller
     {
         $admin = auth()->user();
         $users = User::whereNotIn('name',[$admin->name])->get();
+
         return view('users.index',compact('users'));
     }
 
@@ -77,6 +78,7 @@ class UserController extends Controller
     {
         $user = User::where('id',$id)->first();
         $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
+        
         return view('users.show')->with(['user'=>$user]);
     }
 

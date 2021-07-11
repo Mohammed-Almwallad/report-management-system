@@ -8,7 +8,7 @@
             Users list
         </h4>
         <hr class="bg-dark">
-        <a class="btn btn-primary btn-sm" href="/users/create" role="button">
+        <a class="btn btn-primary btn-sm" href="{{ route('users.create')}}" role="button">
             add new user
         </a>
         <table class="table table-striped table-bordered mt-2">

@@ -23,12 +23,14 @@ Auth::routes(['register'=>false]);
 Route::middleware(['auth'])->group(function () {
     // user routes
     Route::get('/users',[UserController::class, 'index'])->name('users.index');
-    Route::get('/users/{id}',[UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show');
     Route::get('/users/create',[UserController::class, 'create'])->name('users.create');
     Route::post('/users',[UserController::class, 'store'])->name('users.store');
     Route::delete('/users/{id}',[UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/users/{id}/edit',[UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}',[UserController::class, 'update'])->name('users.update');
+
+    // groups routes
     
 });
 
