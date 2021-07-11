@@ -37,32 +37,28 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        @guest
+                        @auth                            
+                        @if (Auth()->user()->isAdmin())
+
+                            <li class="nav-item mr-4">
+                                <a class="nav-link text-white" href="{{ route('users.index')}}">users</a>
+                            </li>
+                            <li class="nav-item mr-4">
+                                <a class="nav-link text-white" href="#">reports</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{{ route('groups.index')}}">groups</a>
+                            </li>
 
                         @else
-                            @if (Auth()->user()->isAdmin())
-
-                                <li class="nav-item mr-4">
-                                    <a class="nav-link text-white" href="{{ route('users.index')}}">users</a>
-                                </li>
-                                <li class="nav-item mr-4">
-                                    <a class="nav-link text-white" href="#">reports</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{ route('groups.index')}}">groups</a>
-                                </li>
-
-                            @else
-                                <li class="nav-item mr-4">
-                                    <a class="nav-link text-white" href="/users">profile</a>
-                                </li>
-                                <li class="nav-item mr-4">
-                                    <a class="nav-link text-white" href="#">reports</a>
-                                </li>
-                            @endif
-
-                        @endguest
-
+                            <li class="nav-item mr-4">
+                                <a class="nav-link text-white" href="/users">profile</a>
+                            </li>
+                            <li class="nav-item mr-4">
+                                <a class="nav-link text-white" href="#">reports</a>
+                            </li>
+                        @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

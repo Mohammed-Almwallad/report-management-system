@@ -16,13 +16,13 @@ use App\Http\Controllers\GroupController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Auth::routes(['register'=>false]);
 
 Route::middleware(['auth'])->group(function () {
-    
+
     // user routes
     Route::get('/users',[UserController::class, 'index'])->name('users.index');
     Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show');
@@ -46,4 +46,4 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
