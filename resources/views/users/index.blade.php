@@ -36,7 +36,6 @@
                                     @csrf
                                     <input class="btn" type="submit" value="Delete user" />
                                  </form>
-                                  {{-- <a class="dropdown-item" href="/users/{{ $user->id }}">Delete user</a> --}}
                                 </div>
                               </div>
                         </td>

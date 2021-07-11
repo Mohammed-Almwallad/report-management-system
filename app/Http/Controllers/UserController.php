@@ -29,8 +29,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::whereNotIn('name',['admin'])->get();
-        return view('users.create', compact('roles'));
+        $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
+
+        return view('users.create')->with(['roles' => $roles]);
     }
 
     /**
@@ -59,11 +60,7 @@ class UserController extends Controller
             'password'=>bcrypt($request->password)
         ]);
 
-        $roles = Role::whereNotIn('name',['admin'])->get();
-        foreach($roles as $role){
-            if(in_array($role->name, $request->roles))
-            $user->roles()->attach($role->id);
-        }
+        $user->roles()->attach($request->roles);
 
         return redirect()->route('users.index')
             ->with('success','User added successfully.');
@@ -91,11 +88,10 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->first();
 
-        $user['roles'] = $user->roles->toArray(); 
-        // dd($user->roles);
-        $roles = Role::whereNotIn('name',['admin'])->pluck('name');
+        $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
+        $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
 
-        return view('users.edit', compact('user','roles'));
+        return view('users.edit')->with(['user' => $user])->with(['roles' => $roles]);
     }
 
     /**
@@ -107,7 +103,25 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'name'=>'required',
+            'email'=>'required',
+            'roles'=>'array|required',
+            'roles.*'=>'required',
+        ]);
+
+        if($validator->fails()){
+            return back()->withErrors($validator->messages());
+        }
+
+        $user = User::where('id', $id)->first();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+        $user->roles()->sync($request->roles);
+        
+        return redirect()->route('users.index')
+        ->with('success','User edited successfully.');
     }
 
     /**
