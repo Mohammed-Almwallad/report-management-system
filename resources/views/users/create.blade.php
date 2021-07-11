@@ -58,9 +58,6 @@
 
                             <div class="col-md-6">
                                 <select multiple class="form-control" id="roles" name="roles[]" required autocomplete="roles">
-                                    {{-- <option>upload-reports</option>
-                                    <option>edit-reports</option>
-                                    <option>delete-reports</option> --}}
                                     @foreach ($roles as $id => $role)
                                     <option value="{{ $id }}">{{ $role }}</option>
                                     @endforeach

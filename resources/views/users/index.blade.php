@@ -30,6 +30,7 @@
                                   actions
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                  <a class="dropdown-item text-center" href="{{ route('users.show', $user->id)}}">show user details</a>
                                   <a class="dropdown-item text-center" href="{{ route('users.edit', $user->id)}}">Edit user</a>
                                   <form action="{{ route('users.destroy', $user->id)}}" method="POST" class="dropdown-item">
                                     {{ method_field('DELETE') }}

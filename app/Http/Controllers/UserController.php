@@ -75,7 +75,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-
+        $user = User::where('id',$id)->first();
+        $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
+        return view('users.show')->with(['user'=>$user]);
     }
 
     /**
@@ -87,7 +89,6 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::where('id', $id)->first();
-
         $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
 
