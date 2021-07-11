@@ -22,6 +22,7 @@ Route::get('/', function () {
 Auth::routes(['register'=>false]);
 
 Route::middleware(['auth'])->group(function () {
+    
     // user routes
     Route::get('/users',[UserController::class, 'index'])->name('users.index');
     Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show');
@@ -32,8 +33,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{id}',[UserController::class, 'update'])->name('users.update');
 
     // groups routes
+    Route::get('/groups',[GroupController::class, 'index'])->name('groups.index');
+    Route::get('/groups/{id}/show',[GroupController::class, 'show'])->name('groups.show');
     Route::get('/groups/create',[GroupController::class, 'create'])->name('groups.create');
     Route::post('/groups',[GroupController::class, 'store'])->name('groups.store');
+    Route::delete('/groups/{id}',[GroupController::class, 'destroy'])->name('groups.destroy');
+    Route::get('/groups/{id}/edit',[GroupController::class, 'edit'])->name('groups.edit');
+    Route::put('/groups/{id}',[GroupController::class, 'update'])->name('groups.update');
 
 
 });

@@ -15,7 +15,10 @@ class GroupController extends Controller
      */
     public function index()
     {
-        //
+       
+        $groups = Group::latest()->pluck('name','id')->toArray();
+
+        return view('groups.index')->with(['groups'=> $groups]);
     }
 
     /**
@@ -48,9 +51,8 @@ class GroupController extends Controller
             'name'=> $request->name,
         ]);
 
-        return $group;
-        // return redirect()->route('users.index')
-        // ->with('success','User added successfully.');
+        return redirect()->route('groups.index')
+        ->with('success','Group added successfully.');
     }
 
     /**
