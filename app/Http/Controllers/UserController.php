@@ -19,11 +19,12 @@ class UserController extends Controller
     public function index()
     {
         $admin = auth()->user();
-        if ($admin->isAdmin()) {
-            $users = User::whereNotIn('name',[$admin->name])->get();
-        } else {
+
+        if (!$admin->isAdmin()) {
             return back()->with('error','You do not have access to this page.');
         }
+
+        $users = User::whereNotIn('name',[$admin->name])->get();
 
         return view('users.index')->with(['users'=>$users]);
     }
@@ -36,12 +37,12 @@ class UserController extends Controller
     public function create()
     {
         $admin = auth()->user();
-        if ($admin->isAdmin()) {
-            $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
-            $groups = Group::latest()->pluck('name','id')->toArray();
-        } else {
+        if (!$admin->isAdmin()) {
             return back()->with('error','You do not have access to this page.');
         }
+
+        $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
+        $groups = Group::latest()->pluck('name','id')->toArray();
         
 
         return view('users.create')->with(['roles' => $roles])->with(['groups'=>$groups]);
@@ -56,7 +57,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $admin = auth()->user();
-        if(!$user->isAdmin()){
+        if(!$admin->isAdmin()){
             return back()->with('error','You do not have access to do this action.'); 
         }
 
@@ -101,9 +102,9 @@ class UserController extends Controller
         if ($user->isAdmin()) {
             $user = User::where('id',$id)->first();
         }
-        $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
-        $user['groups'] = $user->groups->pluck('name','id')->toArray(); 
-        
+
+        $user['roles'] = $user->roles()->pluck('name','id')->toArray(); 
+        $user['groups'] = $user->groups()->pluck('name','id')->toArray(); 
         
         return view('users.show')->with(['user'=>$user]);
     }
@@ -121,9 +122,10 @@ class UserController extends Controller
         if ($user->isAdmin()) {
             $user = User::where('id', $id)->first();
         } 
-        $user['roles'] = $user->roles->pluck('name','id')->toArray(); 
+
+        $user['roles'] = $user->roles()->pluck('name','id')->toArray(); 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
-        $user['groups'] = $user->groups->pluck('name','id')->toArray(); 
+        $user['groups'] = $user->groups()->pluck('name','id')->toArray(); 
         $groups = Group::latest()->pluck('name','id')->toArray();
 
         return view('users.edit')->with(['user' => $user])->with(['roles' => $roles])->with(['groups' => $groups]);
@@ -139,7 +141,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $admin = auth()->user();
-        if(!$user->isAdmin()){
+        if(!$admin->isAdmin()){
             return back()->with('error','You do not have access to do this action.'); 
         }
         
@@ -164,7 +166,7 @@ class UserController extends Controller
         $user->groups()->sync($request->groups);
         
         return redirect()->route('users.index')
-        ->with('success','User edited successfully.');
+        ->with('success','User updated successfully.');
     }
 
     /**
@@ -178,11 +180,10 @@ class UserController extends Controller
         $admin = auth()->user();
 
         if ($admin->isAdmin()) {
-            User::find($id)->delete();
-        } else {
             return back()->with('error','You do not have access to do this action.');
-        }
+        } 
         
+        User::find($id)->delete();
         return redirect()->route('users.index')
             ->with('success','User deleted successfully.');
     }
