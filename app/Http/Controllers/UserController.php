@@ -18,12 +18,14 @@ class UserController extends Controller
      */
     public function index()
     {
+        
         $admin = auth()->user();
-
         if (!$admin->isAdmin()) {
             return back()->with('error','You do not have access to this page.');
         }
-
+            
+        // $this->checkIfUserAuthorized();
+            
         $users = User::whereNotIn('name',[$admin->name])->get();
 
         return view('users.index')->with(['users'=>$users]);
@@ -187,4 +189,14 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success','User deleted successfully.');
     }
+    
+    // private function checkIfUserAuthorized(){
+    
+    //     if(auth()->user()->isAdmin()){
+    //         return true;
+    //     }else{
+    //         return redirect()->route('home')
+    //         ->with('error','You do not have access to do this action.');
+    //     }
+    // }
 }
