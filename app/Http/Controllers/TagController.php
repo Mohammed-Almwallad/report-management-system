@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Group;
+use App\Models\Tag;
 
-class GroupController extends Controller
+class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,8 @@ class GroupController extends Controller
      */
     public function index()
     {
-
-       $groups = Group::latest()->pluck('name','id')->toArray();
-       return view('groups.index')->with(['groups'=> $groups]);
+        $tags = Tag::latest()->pluck('name', 'id')->toArray();
+        return view('tags.index')->with(['tags'=>$tags]);
     }
 
     /**
@@ -27,7 +26,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return view('groups.create');
+        return view('tags.create');
     }
 
     /**
@@ -46,12 +45,12 @@ class GroupController extends Controller
             return back()->withErrors($validator->messages());
         }
 
-        $group = Group::create([
+        $tags = Tag::create([
             'name'=> $request->name,
         ]);
 
-        return redirect()->route('groups.index')
-        ->with('success','Group added successfully.');
+        return redirect()->route('tags.index')
+        ->with('success','Tag added successfully.');
     }
 
     /**
@@ -62,10 +61,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::where('id', $id)->first();
-        $group['users'] = $group->users()->pluck('name','id')->toArray();
-
-        return view('groups.show')->with(['group' => $group ]);
+        //
     }
 
     /**
@@ -76,9 +72,8 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
-        $group = Group::where('id', $id)->first();
-
-        return view('groups.edit')->with(['group' => $group]);
+        $tag = Tag::where('id',$id)->first();
+        return view('tags.edit')->with(['tag' => $tag]);
     }
 
     /**
@@ -98,12 +93,12 @@ class GroupController extends Controller
             return back()->withErrors($validator->messages());
         }
 
-        $group = Group::where('id', $id)->first();
-        $group->name = $request->name;
-        $group->save();
+        $tag = Tag::where('id', $id)->first();
+        $tag->name = $request->name;
+        $tag->save();
 
-        return redirect()->route('groups.index')
-        ->with('success','Group updated successfully.');
+        return redirect()->route('tags.index')
+        ->with('success','Tag updated successfully.');
     }
 
     /**
@@ -114,9 +109,9 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        Group::where('id', $id)->delete();
+        Tag::where('id', $id)->delete();
 
-        return redirect()->route('groups.index')
-        ->with('success','Group deleted successfully.');
+        return redirect()->route('tags.index')
+        ->with('success','Tag deleted successfully.');
     }
 }

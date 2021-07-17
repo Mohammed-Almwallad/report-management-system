@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,14 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::delete('/groups/{id}',[GroupController::class, 'destroy'])->name('groups.destroy');
     Route::get('/groups/{id}/edit',[GroupController::class, 'edit'])->name('groups.edit');
     Route::put('/groups/{id}',[GroupController::class, 'update'])->name('groups.update');
+
+    // tags routes
+    Route::get('/tags',[TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/create',[TagController::class, 'create'])->name('tags.create');
+    Route::post('/tags',[TagController::class, 'store'])->name('tags.store');
+    Route::delete('/tags/{id}',[TagController::class, 'destroy'])->name('tags.destroy');
+    Route::get('/tags/{id}/edit',[TagController::class, 'edit'])->name('tags.edit');
+    Route::put('/tags/{id}',[TagController::class, 'update'])->name('tags.update');
 
 
 });
