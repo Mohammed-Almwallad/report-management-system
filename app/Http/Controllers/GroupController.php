@@ -15,11 +15,6 @@ class GroupController extends Controller
      */
     public function index()
     {
-       $admin = auth()->user();
-
-       if(!$admin->isAdmin()){
-        return back()->with('error','You do not have access to this page.');
-       }
 
        $groups = Group::latest()->pluck('name','id')->toArray();
 
@@ -33,12 +28,6 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-
         return view('groups.create');
     }
 
@@ -50,12 +39,6 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-
         $validator = Validator::make($request->all(),[
             'name'=>'required',
         ]);
@@ -80,12 +63,6 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-
         $group = Group::where('id', $id)->first();
         $group['users'] = $group->users()->pluck('name','id')->toArray();
 
@@ -100,12 +77,6 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-
         $group = Group::where('id', $id)->first();
 
         return view('groups.edit')->with(['group' => $group]);
@@ -120,13 +91,6 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-
         $validator = Validator::make($request->all(),[
             'name'=>'required',
         ]);
@@ -151,12 +115,6 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $admin = auth()->user();
-
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to this page.');
-        }
-        
         Group::where('id', $id)->delete();
 
         return redirect()->route('groups.index')

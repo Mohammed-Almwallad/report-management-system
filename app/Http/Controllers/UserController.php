@@ -19,14 +19,8 @@ class UserController extends Controller
     public function index()
     {
         
-        $admin = auth()->user();
-        if (!$admin->isAdmin()) {
-            return back()->with('error','You do not have access to this page.');
-        }
-            
-        // $this->checkIfUserAuthorized();
-            
-        $users = User::whereNotIn('name',[$admin->name])->get();
+        $user = auth()->user();
+        $users = User::whereNotIn('name',[$user->name])->get();
 
         return view('users.index')->with(['users'=>$users]);
     }
@@ -38,10 +32,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        $admin = auth()->user();
-        if (!$admin->isAdmin()) {
-            return back()->with('error','You do not have access to this page.');
-        }
 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
         $groups = Group::latest()->pluck('name','id')->toArray();
@@ -58,10 +48,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $admin = auth()->user();
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to do this action.'); 
-        }
 
         $validator = Validator::make($request->all(),[
             'name'=>'required',
@@ -121,9 +107,9 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->isAdmin()) {
-            $user = User::where('id', $id)->first();
-        } 
+        // if ($user->isAdmin()) {
+        //     $user = User::where('id', $id)->first();
+        // } 
 
         $user['roles'] = $user->roles()->pluck('name','id')->toArray(); 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
@@ -142,11 +128,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $admin = auth()->user();
-        if(!$admin->isAdmin()){
-            return back()->with('error','You do not have access to do this action.'); 
-        }
-        
+
         $validator = Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required',
@@ -179,12 +161,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $admin = auth()->user();
-
-        if ($admin->isAdmin()) {
-            return back()->with('error','You do not have access to do this action.');
-        } 
-        
         User::find($id)->delete();
         return redirect()->route('users.index')
             ->with('success','User deleted successfully.');
