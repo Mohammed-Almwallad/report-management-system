@@ -107,10 +107,6 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        // if ($user->isAdmin()) {
-        //     $user = User::where('id', $id)->first();
-        // } 
-
         $user['roles'] = $user->roles()->pluck('name','id')->toArray(); 
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
         $user['groups'] = $user->groups()->pluck('name','id')->toArray(); 
@@ -165,14 +161,5 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success','User deleted successfully.');
     }
-    
-    // private function checkIfUserAuthorized(){
-    
-    //     if(auth()->user()->isAdmin()){
-    //         return true;
-    //     }else{
-    //         return redirect()->route('home')
-    //         ->with('error','You do not have access to do this action.');
-    //     }
-    // }
+
 }
