@@ -49,6 +49,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class);
     }
 
+    public function reports(){
+        return $this->hasMany(Report::class);
+    }
+    
     public function isAdmin(){
         return $this->roles()->where('name', 'admin')->exists();
     }

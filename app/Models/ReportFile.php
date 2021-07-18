@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class ReportFile extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name'
+        'file_url',
+        'report_id'
     ];
 
-    public function reports(){
-        return $this->belongsToMany(Report::class);
+    public function report(){
+        return $this->belongsTo(Report::class);
     }
 }
