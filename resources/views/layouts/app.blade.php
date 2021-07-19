@@ -44,7 +44,7 @@
                                 <a class="nav-link text-white" href="{{ route('users.index')}}">users</a>
                             </li>
                             <li class="nav-item mr-4">
-                                <a class="nav-link text-white" href="#">reports</a>
+                                <a class="nav-link text-white" href="{{ route('reports.index')}}">reports</a>
                             </li>
                             <li class="nav-item mr-4">
                                 <a class="nav-link text-white" href="{{ route('groups.index')}}">groups</a>

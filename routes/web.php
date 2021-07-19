@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,12 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::delete('/tags/{id}',[TagController::class, 'destroy'])->name('tags.destroy');
     Route::get('/tags/{id}/edit',[TagController::class, 'edit'])->name('tags.edit');
     Route::put('/tags/{id}',[TagController::class, 'update'])->name('tags.update');
+
+    Route::get('/reports',[ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/{id}/show',[ReportController::class, 'show'])->name('reports.show');
+    Route::get('/reports/create',[ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports',[ReportController::class, 'store'])->name('reports.store');
+    Route::delete('/reports/{id}',[ReportController::class, 'destroy'])->name('reports.destroy');
 
 
 });
