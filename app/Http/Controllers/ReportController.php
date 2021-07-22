@@ -103,6 +103,77 @@ class ReportController extends Controller
             ->with('success','report added successfully.');
     }
 
+    public function createSetOfReports(Request $request){
+
+        if($request->index == '0'){
+            return redirect()->route('reports.index')
+            ->with('error','number of reports need to be more than 0.');
+        }
+        $user = auth()->user();
+
+        if($user->isAdmin()){
+            $groups = Group::latest()->pluck('name','id')->toArray();
+        }else{
+            $groups = $user->groups->pluck('name','id')->toArray();
+        }
+
+        $tags = Tag::latest()->pluck('name','id')->toArray();
+
+        return view('reports.create_set')->with(['groups' => $groups])->with(['tags'=>$tags])->with(['index'=>$request->index]);
+     
+    }
+
+    public function storeSetOfReports(Request $request){
+        foreach ($request->reports as $value) {
+            $data = new Request($value);
+            $response = $this->storeOneReport($data);
+        }
+        return redirect()->route('reports.index')
+        ->with('success','All reports added successfully.');
+
+    }
+
+    private function storeOneReport(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'content' => 'required',
+            'group_id' => 'required',
+            'tags' => 'array|required',
+            'tags.*' => 'required',
+            'files' =>'array|required|max:10240',
+            'files.*' => 'file|mimetypes:audio/mp4,audio/x-wav,audio/ogg,audio/mpeg,image/jpeg,image/png|max:10240',
+        ]);
+                    
+        if($validator->fails()){
+            return back()->withErrors($validator->messages());
+        }
+
+        $report = Report::create([
+            'name'=>$request->name,
+            'content'=>$request->content,
+            'group_id'=>$request->group_id,
+            'user_id'=> auth()->user()->id
+        ]);
+
+        $report->tags()->attach($request->tags);
+        if($request->has('files')){
+                for ($i=0; $i < count($request['files']); $i++) { 
+            
+                    $filenameWithExt = $request['files'][$i]->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    $extesion = $request['files'][$i]->getClientOriginalExtension();
+                    $fileNameToStore = $filename.'_'.time().'.'.$extesion;
+                    $path = $request['files'][$i]->storeAs('public/files', $fileNameToStore);
+                    
+                    ReportFile::create([
+                        'report_id'=>$report->id,
+                        'file_url'=>$fileNameToStore
+                    ]);
+                }
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -179,6 +250,7 @@ class ReportController extends Controller
         $report->name = $request->name;
         $report->content = $request->content;
         $report->group_id = $request->group_id;
+        $report->editor = auth()->user()->name;
         $report->save();
         
         $report->tags()->sync($request->tags);
@@ -241,13 +313,30 @@ class ReportController extends Controller
         }
 
         if ($request->search_by == 'name' || $request->search_by == 'content') {
-            // search by report name or report content
+            // search by report report name or report content
             $response = $this->searchByNameOrContent($request->search_by ,$request->text);
         
         }elseif($request->search_by == 'uploader' || $request->search_by == 'group' || $request->search_by == 'tag'){
             // search by uploader name, tag or group
             $response = $this->searchBy($request->search_by ,$request->text);
 
+        }elseif($request->search_by == 'editor'){
+
+            $user = auth()->user();
+
+            if($user->isAdmin()){
+                $reports = Report::where('editor', $request->text)->get();
+            }else{
+                $groups = $user->groups->pluck('id')->toArray();
+                $reports = Report::whereIn('group_id', $groups)->where('editor', $request->text)->get();
+            }
+
+            if(empty($reports)){
+                $response = redirect()->route('reports.index')
+                ->with('error','there are no reports with this '. $search_by .'.');
+            }
+    
+            $response =  view('reports.index')->with(['reports'=>$reports]);
         }
 
         return $response;
