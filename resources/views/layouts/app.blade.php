@@ -58,7 +58,7 @@
                                 <a class="nav-link text-white" href="{{ route('users.show', Auth()->user()->id)}}">profile</a>
                             </li>
                             <li class="nav-item mr-4">
-                                <a class="nav-link text-white" href="#">reports</a>
+                                <a class="nav-link text-white" href="{{ route('reports.index')}}">reports</a>
                             </li>
                         @endif
                         @endauth
