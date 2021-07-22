@@ -14,13 +14,21 @@ class Role
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, ... $roles)
     {
         $user = Auth()->user();
 
         if($user->isAdmin()){
             return $next($request);
         }
-        return back()->with('error','You do not have access to this page.');
+
+        foreach ($roles as $key => $role) {
+            if($user->hasRole($role)){
+                return $next($request);
+            }
+        }
+
+
+        return back()->with('error','Unauthorized page.');
     }
 }
