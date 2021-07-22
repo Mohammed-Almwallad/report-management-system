@@ -105,9 +105,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = auth()->user();
-
-        $user['roles'] = $user->roles()->pluck('name','id')->toArray(); 
+        $user = User::where('id', $id)->first();
+        
+        if($user == null){
+            return redirect()->route('users.index')
+            ->with('error','There are no user with this id.');
+        }
         $roles = Role::whereNotIn('name',['admin'])->pluck('name','id')->toArray();
         $user['groups'] = $user->groups()->pluck('name','id')->toArray(); 
         $groups = Group::latest()->pluck('name','id')->toArray();
