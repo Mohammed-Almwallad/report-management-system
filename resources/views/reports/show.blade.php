@@ -76,7 +76,7 @@
 
                                     @foreach ($report->report_files as $files)
                                         
-                                    <a href="/storage/files/{{ $files->file_url}}" class="btn btn-primary">File {{ ++$loop->index }}</a>
+                                    <a href="/storage/files/{{ $files->file_url}}" class="btn btn-primary">File {{ $loop->iteration }}</a>
                                     @if (!$loop->last)
                                         ,
                                     @endif

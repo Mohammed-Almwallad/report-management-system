@@ -17,6 +17,18 @@
                     <a class="btn btn-primary btn-sm" href="{{ route('reports.create')}}" role="button">
                         add new report
                     </a>
+
+                    <form class="mt-3" method="POST" action="{{ route('reports.create_set')}}">
+                        @csrf
+                        <div class="row flex-row-reverse">
+                          <div class="col p-0">
+                            <input type="text" name="index" class="form-control w-50" required placeholder="number of reports">
+                          </div>
+                          <div class="col-5">
+                              <button type="submit" class="btn btn-primary">add set of reports</button>
+                          </div>
+                        </div>
+                    </form>
                     @endif
                 </div>
                 <div class="col-6 p-0">
@@ -42,7 +54,7 @@
                               <button type="submit" class="btn btn-primary">Search</button>
                           </div>
                         </div>
-                      </form>
+                    </form>
                 </div>
             </div>
         </div>

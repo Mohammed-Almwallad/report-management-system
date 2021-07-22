@@ -57,8 +57,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reports/create',[ReportController::class, 'create'])->name('reports.create')->middleware(['auth', 'role:create-reports']);
     Route::post('/reports',[ReportController::class, 'store'])->name('reports.store')->middleware(['auth', 'role:create-reports']);
     Route::delete('/reports/{id}',[ReportController::class, 'destroy'])->name('reports.destroy')->middleware(['auth', 'role:delete-reports']);
-    Route::get('/reports/{id}/edit',[ReportController::class, 'edit'])->name('reports.edit')->middleware(['auth', 'role:delete-reports']);;
-    Route::put('/reports/{id}',[ReportController::class, 'update'])->name('reports.update')->middleware(['auth', 'role:delete-reports']);;
+    Route::get('/reports/{id}/edit',[ReportController::class, 'edit'])->name('reports.edit')->middleware(['auth', 'role:delete-reports']);
+    Route::put('/reports/{id}',[ReportController::class, 'update'])->name('reports.update')->middleware(['auth', 'role:delete-reports']);
+    Route::post('/reports/create/set',[ReportController::class, 'createSetOfReports'])->name('reports.create_set')->middleware(['auth', 'role:create-reports']);
+    Route::post('/reports/store',[ReportController::class, 'storeSetOfReports'])->name('reports.store_set')->middleware(['auth', 'role:create-reports']);
+
     Route::post('/reports/search',[ReportController::class, 'searchForReports'])->name('reports.search')->middleware('auth');
 
 Route::get('/users/{id}/show',[UserController::class, 'show'])->name('users.show')->middleware('auth');
