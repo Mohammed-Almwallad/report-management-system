@@ -44,7 +44,7 @@ class AdminSeeder extends Seeder
        $admin->roles()->attach($adminRole);
 
        Group::create([
-        'name'=>'KSA'
+        'name'=>'unsigned'
        ]);
        Group::create([
         'name'=>'US'
