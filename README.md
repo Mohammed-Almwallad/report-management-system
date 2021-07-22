@@ -25,6 +25,9 @@ php artisan key:generate
 php artisan migrate
 ``` 
 8. Seed the database to generate the admin
+```bash
+php artisan db:seed
+``` 
 email: admin@hotmail.com
 password: 12345678
 
