@@ -20,6 +20,7 @@
                                     </h5>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row mt-2">
                                 <div class="col-2">
                                     <h4>
@@ -32,6 +33,7 @@
                                     </h5>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row mt-2">
                                 <div class="col-2">
                                     <h4>
@@ -44,6 +46,7 @@
                                     </h5>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row mt-2">
                                 <div class="col-2">
                                     <h4>
@@ -53,11 +56,16 @@
                                 <div class="col-10 mt-1">
                                     <h5>
                                         @foreach ($report->tags as $tag)
+
                                             {{ $tag->name}}
+                                            @if (!$loop->last)
+                                                ,
+                                            @endif
                                         @endforeach
                                     </h5>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row mt-2">
                                 <div class="col-2">
                                     <h4>
@@ -68,9 +76,13 @@
                                     @foreach ($report->report_files as $files)
                                         
                                     <a href="/storage/files/{{ $files->file_url}}" class="card-link">{{ $files->file_url }}</a>
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
                                     @endforeach
                                 </div>
                             </div>
+                            <hr>
                             <div class="row mt-2">
                                 <div class="col-4">
                                     <h4>
