@@ -114,7 +114,16 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        Group::where('id', $id)->delete();
+        $group = Group::where('id', $id)->first();
+
+        $reports = $group->reports;
+        $unsigned = Group::where('name', "unsigned")->first();
+
+        foreach ($reports as $report) {
+            $report->group_id = $unsigned->id;
+            $report->save();
+        }
+        $group->delete();
 
         return redirect()->route('groups.index')
         ->with('success','Group deleted successfully.');

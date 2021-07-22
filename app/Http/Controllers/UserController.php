@@ -160,7 +160,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $user = User::where('id', $id)->first();
+
+        $reports = $user->reports;
+        $admin = user::where('name', "admin")->first();
+
+        foreach ($reports as $report) {
+            $report->user_id = $admin->id;
+            $report->save();
+        }
+
+        $user->delete();
+        
         return redirect()->route('users.index')
             ->with('success','User deleted successfully.');
     }

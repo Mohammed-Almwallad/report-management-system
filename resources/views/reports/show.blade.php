@@ -73,9 +73,10 @@
                                     </h4>
                                 </div>
                                 <div class="col-10">
+
                                     @foreach ($report->report_files as $files)
                                         
-                                    <a href="/storage/files/{{ $files->file_url}}" class="card-link">{{ $files->file_url }}</a>
+                                    <a href="/storage/files/{{ $files->file_url}}" class="btn btn-primary">File {{ ++$loop->index }}</a>
                                     @if (!$loop->last)
                                         ,
                                     @endif

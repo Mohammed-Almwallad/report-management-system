@@ -158,7 +158,6 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request->delete_old_files;
         $validator = Validator::make($request->all(),[
             'name' => 'required',
             'content' => 'required',
