@@ -18,13 +18,7 @@ class CreateRolesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
-        DB::table('roles')->insert([
-            ['name'=>'admin'],
-            ['name'=>'edit-reports'],
-            ['name'=>'create-reports'],
-            ['name'=>'view-reports'],
-            ['name'=>'delete-reports']
-        ]);
+
     }
 
     /**

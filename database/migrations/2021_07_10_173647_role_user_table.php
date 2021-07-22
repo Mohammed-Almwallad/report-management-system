@@ -20,10 +20,7 @@ class RoleUserTable extends Migration
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
-        DB::table('role_user')->insert([
-            'user_id'=>'1',
-            'role_id'=>'1'
-        ]);
+
     }
 
     /**
