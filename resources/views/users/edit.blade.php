@@ -50,11 +50,12 @@
                                     <select multiple class="form-control" id="roles" name="roles[]" required
                                         autocomplete="roles">
                                         @foreach ($roles as $id => $role)
-                                            @if (in_array($role, $user->roles))
+                                            @if ($user->hasRole($role))
                                             <option value="{{ $id }}" selected>{{ $role }}</option>
                                             @else
                                             <option value="{{ $id }}">{{ $role }}</option>
                                             @endif
+
                                         @endforeach
                                     </select>
                                 </div>
