@@ -77,7 +77,7 @@
                                   actions
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                  @if ($user->hasRole('view-reports') || $user->isAdmin())
+                                  @if ($user->hasRole('view-reports') || $user->isAdmin() || $user->hasRole('edit-reports'))
                                   <a class="dropdown-item text-center" href="{{ route('reports.show', $report->id)}}">show report details</a>
                                   @endif  
 
